@@ -1,0 +1,37 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+  {{ post.post_name }}
+{% endblock title %}
+
+{% block content %}
+  <h2>Вы действительно хотите удалить данную запись?</h2>
+  <table>
+      <thead>
+          <th>
+              Название
+          </th>
+          <th>
+              Дата публикации
+          </th>
+          <th>
+              Содержание
+          </th>
+      </thead>
+      <tr>
+          <td>
+              {{ post.post_name }}
+          </td>
+          <td>
+              {{ post.post_date | date:'d M Y' }}
+          </td>
+          <td>
+              {{ post.content }}
+          </td>
+      </tr>
+  </table>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="удалить">
+    </form>
+{% endblock content %}

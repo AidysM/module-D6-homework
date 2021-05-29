@@ -48,7 +48,7 @@ class Post(models.Model):
     position = models.CharField(max_length=2,
                                 choices=POSITIONS,
                                 default=state)
-    created = models.DateTimeField(auto_now_add=True)
+    post_date = models.DateTimeField(auto_now_add=True)
     post_name = models.CharField(max_length=250)
     content = models.TextField()
     rating_post = models.IntegerField(default=0)
