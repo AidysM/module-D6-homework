@@ -36,6 +36,7 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    subscribers = models.ManyToManyField(User)
 
 
 class Post(models.Model):

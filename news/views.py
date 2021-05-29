@@ -5,11 +5,21 @@ from django.shortcuts import render, reverse, redirect
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views import View
+from django.core.mail import EmailMultiAlternatives # импортируем класс для создание объекта письма с html
+from django.template.loader import render_to_string # импортируем функцию, которая срендерит наш html в текст
+from django.contrib.auth.decorators import login_required
     # импортируем класс, который говорит нам о том, что
     # в этом представлении мы будем выводить список объектов из БД
-from .models import Post
+from .models import Post, Category
 from .filters import PostFilter
 from .forms import PostForm
+
+
+def subscribe_to_category(request, category_pk):
+    category = Category.objects.get(pk=category_pk)
+    category.subscribers.add(request.user)
+    category.save()
+    return redirect('/news/')
 
 
 class PostList(ListView):
@@ -38,6 +48,8 @@ class PostDetailView(DetailView):
     #context_object_name = 'post' # название объекта. в нём будет
     queryset = Post.objects.all()
 
+    # subscribe_to_category(request, category_pk)
+
 
 class Search(ListView):
     model = Post
@@ -60,6 +72,8 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'post_create.html'
     form_class = PostForm
     success_url = '/news/'
+
+
 
 
 class PostUpdateView(PermissionRequiredMixin, UpdateView):
