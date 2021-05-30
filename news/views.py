@@ -66,11 +66,35 @@ class Search(ListView):
         return context
 
 
+def mail_post(name, text, category):
+    cats = Category.objects.filter(name=category)
+    for cat in cats:
+        subscs = Category.subscribers.all()
+        for subsc in subscs:
+            send_mail(
+                subject=name,
+                # имя клиента и дата записи будут в теме для удобства
+                message=text,  # сообщение с кратким описанием проблемы
+                from_email='mongushit@yandex.ru',  # здесь указываете почту, с которой будете отправлять (об этом попозже)
+                recipient_list=[subsc.user.email, ]
+                # здесь список получателей. Например, секретарь, сам врач и т. д.
+            )
+
+
 class PostCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ('news.add_post',)
     template_name = 'post_create.html'
     form_class = PostForm
     success_url = '/news/'
+
+    mail_post(form_class.Meta.model.post_name,
+                form_class.Meta.model.content,
+                form_class.Meta.model.category)
+
+    # mail_admins(
+    #     subject=f'{post.post_name} {post.post_date.strftime("%d %m %Y")}',
+    #     message=post.content,
+    # )
 
 
 class PostUpdateView(PermissionRequiredMixin, UpdateView):
