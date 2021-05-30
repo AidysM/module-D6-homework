@@ -156,7 +156,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 
@@ -168,3 +168,26 @@ EMAIL_USE_SSL = True # Яндекс использует ssl, подробнее
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '165946328896-4fois86e7qvrncg7vhekf73kucl072gj.apps.googleusercontent.com',
+            'secret': 'JaHzDshr1ef_fqZGPWoyn5Io',
+            'key': ''
+        }
+    }
+}
+
+ADMINS = [
+    ('Aidys', 'mongushit79@gmail.com'),
+    # список всех админов в формате ('имя', 'их почта')
+]
+MANAGERS = [
+    ('Айдыс', 'mongush10011979@gmail.com'),
+    # список всех менеджеров в формате ('имя', 'их почта')
+]
+SERVER_EMAIL = 'mongushit@yandex.ru' # это будет у нас вместо аргумента FROM в массовой рассылке

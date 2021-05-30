@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.core.mail import send_mail
+from django.core.mail import send_mail, mail_admins
 from django.shortcuts import render, reverse, redirect
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -13,13 +13,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, Category
 from .filters import PostFilter
 from .forms import PostForm
-
-
-def subscribe_to_category(request, category_pk):
-    category = Category.objects.get(pk=category_pk)
-    category.subscribers.add(request.user)
-    category.save()
-    return redirect('/news/')
 
 
 class PostList(ListView):
@@ -41,14 +34,20 @@ class PostList(ListView):
         return context
 
 
+def subscribe_to_category(request, category_pk):
+    category = Category.objects.get(pk=category_pk)
+    category.subscribers.add(request.user)
+    category.save()
+    return redirect('/news/')
+
 # создаём представление в котором будет детали конкретного отдельного товара
 class PostDetailView(DetailView):
     #model = Post # модель всё та же, но мы хотим получать детали конкретно отдельного товара
-    template_name = 'post.html' # название шаблона будет product.html
+    template_name = 'post.html' # название шаблона будет post.html
     #context_object_name = 'post' # название объекта. в нём будет
     queryset = Post.objects.all()
 
-    # subscribe_to_category(request, category_pk)
+    # subscribe_to_category()
 
 
 class Search(ListView):
@@ -72,8 +71,6 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'post_create.html'
     form_class = PostForm
     success_url = '/news/'
-
-
 
 
 class PostUpdateView(PermissionRequiredMixin, UpdateView):
@@ -106,13 +103,36 @@ class PostView(View):
         )
         post.save()
 
-        send_mail(
+        # send_mail(
+        #     subject=f'{post.post_name} {post.post_date.strftime("%Y-%M-%d")}',
+        #     # имя клиента и дата записи будут в теме для удобства
+        #     message=post.content,  # сообщение с кратким описанием проблемы
+        #     from_email='mongushit@yandex.ru',  # здесь указываете почту, с которой будете отправлять (об этом попозже)
+        #     recipient_list=['mongushit79@gmail.com', ]
+        #     # здесь список получателей. Например, секретарь, сам врач и т. д.
+        # )
+
+        # получем наш html
+        html_content = render_to_string(
+            'post.html',
+            {
+                'post': post,
+            }
+        )
+        # в конструкторе уже знакомые нам параметры, да? Называются правда немного по другому, но суть та же.
+        msg = EmailMultiAlternatives(
             subject=f'{post.post_name} {post.post_date.strftime("%Y-%M-%d")}',
-            # имя клиента и дата записи будут в теме для удобства
-            message=post.content,  # сообщение с кратким описанием проблемы
-            from_email='mongushit@yandex.ru',  # здесь указываете почту, с которой будете отправлять (об этом попозже)
-            recipient_list=['mongushit79@gmail.com', ]
-            # здесь список получателей. Например, секретарь, сам врач и т. д.
+            body=post.content,  # это то же, что и message
+            from_email='mongushit@yandex.ru',
+            to=['mongushit79@gmail.com'],  # это то же, что и recipients_list
+        )
+        msg.attach_alternative(html_content, "text/html")  # добавляем html
+        msg.send()  # отсылаем
+
+        # отправляем письмо всем админам по аналогии с send_mail, только здесь получателя указывать не надо
+        mail_admins(
+            subject=f'{post.post_name} {post.post_date.strftime("%d %m %Y")}',
+            message=post.content,
         )
 
         return redirect('news:post')
