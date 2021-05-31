@@ -47,7 +47,7 @@ class PostDetailView(DetailView):
     #context_object_name = 'post' # название объекта. в нём будет
     queryset = Post.objects.all()
 
-    # subscribe_to_category()
+    # subscribe_to_category(request=? , queryset.category) - ?
 
 
 class Search(ListView):
