@@ -34,6 +34,18 @@ class PostList(ListView):
         return context
 
 
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'categories.html'
+    context_object_name = 'categorys'
+    queryset = Category.objects.order_by('name')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CategoryListView, self).get_context_data(**kwargs)
+
+        return context
+
+
 def subscribe_to_category(request, category_pk):
     category = Category.objects.get(pk=category_pk)
     category.subscribers.add(request.user)
@@ -48,6 +60,11 @@ class PostDetailView(DetailView):
     queryset = Post.objects.all()
 
     # subscribe_to_category(request=? , queryset.category) - ?
+
+
+class CategoryDetailView(DetailView):
+    template_name = 'category.html'
+    queryset = Category.objects.all()
 
 
 class Search(ListView):
@@ -160,3 +177,12 @@ class PostView(View):
         )
 
         return redirect('news:post')
+
+class CategoryView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'category.html', {})
+
+
+class CategoriesView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'categories.html', {})
