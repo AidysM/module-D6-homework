@@ -9,5 +9,5 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ['post_name', 'position', 'category', 'author', 'content']
-        # не забываем включить галочку в поля иначе она не будет показываться на странице!
+
 

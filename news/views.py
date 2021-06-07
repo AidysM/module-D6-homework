@@ -5,11 +5,11 @@ from django.shortcuts import render, reverse, redirect
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views import View
-from django.core.mail import EmailMultiAlternatives # импортируем класс для создание объекта письма с html
-from django.template.loader import render_to_string # импортируем функцию, которая срендерит наш html в текст
+from django.core.mail import EmailMultiAlternatives  # импортируем класс для создание объекта письма с html
+from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
 from django.contrib.auth.decorators import login_required
-    # импортируем класс, который говорит нам о том, что
-    # в этом представлении мы будем выводить список объектов из БД
+# импортируем класс, который говорит нам о том, что
+# в этом представлении мы будем выводить список объектов из БД
 from .models import Post, Category
 from .filters import PostFilter
 from .forms import PostForm
@@ -18,9 +18,9 @@ from .forms import PostForm
 class PostList(ListView):
     model = Post  # указываем модель, объекты которой мы будем выводить
     template_name = 'posts.html'  # указываем имя шаблона, в котором будет лежать html, в
-        # котором будут все инструкции о том, как именно пользователю должны вывестись наши объекты
+    # котором будут все инструкции о том, как именно пользователю должны вывестись наши объекты
     context_object_name = 'posts'  # это имя списка, в котором будут лежать все объекты,
-        # его надо указать, чтобы обратиться к самому списку объектов через html-шаблон
+    # его надо указать, чтобы обратиться к самому списку объектов через html-шаблон
     queryset = Post.objects.order_by('-post_date')
     paginate_by = 10
 
@@ -31,6 +31,7 @@ class PostList(ListView):
         context = super().get_context_data(**kwargs)
         context['filter'] = PostFilter(self.request.GET,
                                        queryset=self.get_queryset())  # вписываем фильтр
+        # context['category'] = Post.objects.get(id=self.request.GET[?]).category_set.all()
         return context
 
 
@@ -52,14 +53,15 @@ def subscribe_to_category(request, category_pk):
     category.save()
     return redirect('/news/')
 
+
 # создаём представление в котором будет детали конкретного отдельного товара
 class PostDetailView(DetailView):
-    #model = Post # модель всё та же, но мы хотим получать детали конкретно отдельного товара
-    template_name = 'post.html' # название шаблона будет post.html
-    #context_object_name = 'post' # название объекта. в нём будет
+    # model = Post # модель всё та же, но мы хотим получать детали конкретно отдельного товара
+    template_name = 'post.html'  # название шаблона будет post.html
+    # context_object_name = 'post' # название объекта. в нём будет
     queryset = Post.objects.all()
 
-    # subscribe_to_category(request=? , queryset.category) - ?
+    # subscribe_to_category(request=queryset, )
 
 
 class CategoryDetailView(DetailView):
@@ -72,14 +74,14 @@ class Search(ListView):
     template_name = 'search.html'
     context_object_name = 'posts'
     ordering = ['-post_date']
-    paginate_by = 10 # поставим постраничный вывод в 10 элементов
+    paginate_by = 10  # поставим постраничный вывод в 10 элементов
 
     def get_context_data(self, **kwargs):  # забираем отфильтрованные объекты переопределяя
-            # метод get_context_data у наследуемого класса (привет полиморфизм, мы скучали!!!)
+        # метод get_context_data у наследуемого класса (привет полиморфизм, мы скучали!!!)
         context = super().get_context_data(**kwargs)
         context['filter'] = PostFilter(self.request.GET,
                                        queryset=self.get_queryset())  # вписываем наш
-                                                                # фильтр в контекст
+        # фильтр в контекст
         return context
 
 
@@ -92,7 +94,8 @@ def mail_post(name, text, category):
                 subject=name,
                 # имя клиента и дата записи будут в теме для удобства
                 message=text,  # сообщение с кратким описанием проблемы
-                from_email='mongushit@yandex.ru',  # здесь указываете почту, с которой будете отправлять (об этом попозже)
+                from_email='mongushit@yandex.ru',
+                # здесь указываете почту, с которой будете отправлять (об этом попозже)
                 recipient_list=[subsc.user.email, ]
                 # здесь список получателей. Например, секретарь, сам врач и т. д.
             )
@@ -105,8 +108,8 @@ class PostCreateView(PermissionRequiredMixin, CreateView):
     success_url = '/news/'
 
     mail_post(form_class.Meta.model.post_name,
-                form_class.Meta.model.content,
-                form_class.Meta.model.category)
+              form_class.Meta.model.content,
+              form_class.Meta.model.category)
 
     # mail_admins(
     #     subject=f'{post.post_name} {post.post_date.strftime("%d %m %Y")}',
@@ -119,6 +122,7 @@ class PostUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = 'post_create.html'
     form_class = PostForm
     success_url = '/news/'
+
     # метод get_object мы используем вместо queryset, чтобы получить информацию
     # об объекте который мы собираемся редактировать
     def get_object(self, **kwargs):
@@ -177,6 +181,7 @@ class PostView(View):
         )
 
         return redirect('news:post')
+
 
 class CategoryView(View):
     def get(self, request, *args, **kwargs):
