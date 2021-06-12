@@ -31,7 +31,7 @@ class PostList(ListView):
         context = super().get_context_data(**kwargs)
         context['filter'] = PostFilter(self.request.GET,
                                        queryset=self.get_queryset())  # вписываем фильтр
-        # context['category'] = Post.objects.get(id=self.request.GET[?]).category_set.all()
+        context['category'] = Category.objects.values_list()
         return context
 
 
