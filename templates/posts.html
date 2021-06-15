@@ -3,7 +3,7 @@
 
 {% load custom_filters %}
 
-<!-- Название у нас будет products -->
+<!-- Название у нас будет posts -->
 {% block title %}
     Новости
 {% endblock title %}
@@ -13,7 +13,7 @@
     <h1>Все новости</h1>
     <h3>Общее количество: {{ posts | length }}</h3>
     <hr>
-    {% if posts %} <!-- Выводим товары только если они есть с помощью тега if -->
+    {% if posts %} <!-- Выводим посты только если они есть с помощью тега if -->
         <table>
             <tr>
                 <td>
@@ -44,7 +44,7 @@
                 </td>
                 <td>
                     {% for categ in category %}
-                        <a href=""><u>{{ categ }}</u></a>
+                        <a href="category/{{categ.pk}}"><u>{{ categ }}</u></a>
                     {% endfor %}
                 </td>
                 <td>
