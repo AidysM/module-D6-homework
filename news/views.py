@@ -69,6 +69,7 @@ class CategoryDetailView(DetailView):
     queryset = Category.objects.all()
 
 
+
 class Search(ListView):
     model = Post
     template_name = 'search.html'

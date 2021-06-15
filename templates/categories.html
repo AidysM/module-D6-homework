@@ -13,7 +13,7 @@
             т.е. новый html код. При этом сам цикл работет точно также, как и в python.
             product — переменная цикла, т.е. наш товар взятый из общего списка -->
             {{ category.name }}
-            <a href="/news/category/{{category.pk}}/"> Перейти </a>
+            <a href="/news/category/{{ pk }}/"> Перейти </a>
             <br>
         {% endfor %}
     {% endif %}

@@ -43,9 +43,9 @@
                 <!-- добавим ссылку на удаление товара-->
                 </td>
                 <td>
-
-                        <a href=""><u>{{ post.category }}</u></a>
-
+                    {% for categ in category %}
+                        <a href=""><u>{{ categ }}</u></a>
+                    {% endfor %}
                 </td>
                 <td>
                     {{ post.post_date | date:'d M Y' }}
