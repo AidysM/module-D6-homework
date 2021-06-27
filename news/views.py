@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views import View
 from django.core.mail import EmailMultiAlternatives  # импортируем класс для создание объекта письма с html
-from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
+from django.template.loader import render_to_string, select_template  # импортируем функцию, которая срендерит наш html в текст
 from django.contrib.auth.decorators import login_required
 # импортируем класс, который говорит нам о том, что
 # в этом представлении мы будем выводить список объектов из БД
@@ -47,11 +47,11 @@ class CategoryListView(ListView):
         return context
 
 
-def subscribe_to_category(request, category_pk):
-    category = Category.objects.get(pk=category_pk)
+def subscribe_to_category(request):
+    category = Category.objects.get(pk=request.GET.get('subscribe_to'))
     category.subscribers.add(request.user)
-    category.save()
-    return redirect('/news/')
+    category.save(update_fields=['subscribers'])
+    return redirect('/news/category/{{ pk }}')
 
 
 # создаём представление в котором будет детали конкретного отдельного товара
@@ -61,7 +61,7 @@ class PostDetailView(DetailView):
     # context_object_name = 'post' # название объекта. в нём будет
     queryset = Post.objects.all()
 
-    # subscribe_to_category(request=queryset, )
+    subscribe_to_category
 
 
 class CategoryDetailView(DetailView):
