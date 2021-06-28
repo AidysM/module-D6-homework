@@ -43,8 +43,8 @@
                 <!-- добавим ссылку на удаление товара-->
                 </td>
                 <td>
-                    {% for categ in category %}
-                        <a href="category/{{ categ.pk }}/"><u>{{ categ.name }}</u></a>
+                    {% for category in post.category.all %}
+                        {{ category.name }}
                     {% endfor %}
                 </td>
                 <td>

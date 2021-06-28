@@ -26,7 +26,7 @@
           </td>
           <td>
               {% for category in post.category.all %}
-                  <a href=""><u>{{ category.name }}</u></a>
+                  {{ category.name }}
               {% endfor %}
           </td>
           <td>
@@ -39,7 +39,7 @@
   </table>
 <hr>
     {% for category in post.category.all %}
-        <a href="category/subscribe/?category={{ category.id }}"> Подписаться на {{ category.name }} </a>
+        <a href="category/subscribe/?category={{ category.id }}">Подписаться на {{ category.name }}</a><br>
     {% endfor %}
     
 
