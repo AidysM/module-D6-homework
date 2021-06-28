@@ -25,9 +25,9 @@
               {{ post.post_name }}
           </td>
           <td>
-              
+              {% for category in post.category.all %}
                   <a href=""><u>{{ category.name }}</u></a>
-              
+              {% endfor %}
           </td>
           <td>
               {{ post.post_date | date:'d M Y' }}
@@ -38,7 +38,10 @@
       </tr>
   </table>
 <hr>
-    <button> <a href="category/?subscribe_to={{ post.category }}/"> Подписаться на {{ post.category.name }} </a> </button>
+    {% for category in post.category.all %}
+        <a href="category/subscribe/?category={{ category.id }}"> Подписаться на {{ category.name }} </a>
+    {% endfor %}
+    
 
 {% endblock content %}
 

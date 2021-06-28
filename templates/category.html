@@ -9,7 +9,9 @@
     <h4>Информация о категории постов</h4>
     <br>
     Подписчики:
-    {{ category.subscribers }}
+    {% for subscr in category.subscribers.all %}
+      <a href="/user/{{ subscr.id}}/">{{ subscr }}</a>
+    {% endfor %}
 
 <hr>
     <button> <a href="{% url 'subscribe_to_category' category.pk"> Подписаться </a> </button>

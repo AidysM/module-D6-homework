@@ -48,10 +48,10 @@ class CategoryListView(ListView):
 
 
 def subscribe_to_category(request):
-    category = Category.objects.get(pk=request.GET.get('subscribe_to'))
+    category = Category.objects.get(pk=request.GET.get('category'))
     category.subscribers.add(request.user)
-    category.save(update_fields=['subscribers'])
-    return redirect('/news/category/{{ pk }}')
+    category.save()
+    return redirect(f'/news/category/{category.pk}')
 
 
 # создаём представление в котором будет детали конкретного отдельного товара
