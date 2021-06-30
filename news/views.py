@@ -86,20 +86,23 @@ class Search(ListView):
         return context
 
 
-def mail_post(name, text, category):
+def mail_post(post_name, text, category):
     cats = Category.objects.filter(name=category)
     for cat in cats:
-        subscs = Category.subscribers.all()
-        for subsc in subscs:
+        subscbrs = Category.subscribers.all()
+        for subscbr in subscbrs:
             send_mail(
-                subject=name,
+                subject=post_name,
                 # имя клиента и дата записи будут в теме для удобства
-                message=text,  # сообщение с кратким описанием проблемы
+                message=f'Вы подписались в NewsPaper на категорию {cat.name}. Создана новая запись \
+                            {post_name} со следующим содержимым: {text[:100]}. \
+                            Вы можете прочесть запись по ссылке: ?',  # сообщение с кратким описанием проблемы
                 from_email='mongushit@yandex.ru',
                 # здесь указываете почту, с которой будете отправлять (об этом попозже)
-                recipient_list=[subsc.user.email, ]
+                recipient_list=[subscbr.user.email, ]
                 # здесь список получателей. Например, секретарь, сам врач и т. д.
             )
+
 
 
 class PostCreateView(PermissionRequiredMixin, CreateView):

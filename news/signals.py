@@ -34,3 +34,12 @@ def notify_managers_post_canceled(sender, instance, **kwargs):
     )
 
     print(subject)
+
+
+# from django.db.models.signals import m2m_changed
+# @receiver(m2m_changed, sender=Post.category.through)
+# def notify_subscribers_post(sender, instance, action, **kwargs):
+#     if action == "post_add":
+#         pass
+
+

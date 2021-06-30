@@ -33,7 +33,7 @@
               {{ post.post_date | date:'d M Y' }}
           </td>
           <td>
-              {{ post.content }}
+              {{ post.content | truncatechars:100 }}
           </td>
       </tr>
   </table>

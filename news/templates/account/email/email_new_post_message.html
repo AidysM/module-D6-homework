@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post: {{post_name}}</title>
+</head>
+<body>
+    <!-- Загружаем тег который позволит получить нам ссылку на новый пост -->
+    <h1>Здравствуйте, {{ user.username }}! Вы подписались на категорию {{category.name}}.</h1>
+    <h3>Появилась новая запись {{post.post_name}} со следующим содержимым: </h3>
+    <h3>{{post.content[:100]}}</h3>
+    <h3>Можете прочесть ее перейдя <a href="{{ new_post_url }}">по ссылке</a>.</h3>
+     <!-- Всставляем ссылку на пост -->
+</body>
+</html>
