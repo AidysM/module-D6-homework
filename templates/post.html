@@ -26,7 +26,7 @@
           </td>
           <td>
               {% for category in post.category.all %}
-                  {{ category.name }}
+                  <a href="{% url 'category' category.pk %}">{{ category.name }}</a>
               {% endfor %}
           </td>
           <td>
