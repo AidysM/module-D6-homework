@@ -104,13 +104,13 @@ def mail_post(post_name, text, category):
             )
 
 
-
 class PostCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ('news.add_post',)
     template_name = 'post_create.html'
     form_class = PostForm
     success_url = '/news/'
 
+    # subscribers =  # Здесь нужно отфильтровать подписчиков на категорию поста и отправить им электронку о созданном посте
     mail_post(form_class.Meta.model.post_name,
               form_class.Meta.model.content,
               form_class.Meta.model.category)
